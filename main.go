@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/team-joob/terraform-provider-jira/internal/jira"
+	"github.com/joob-com/terraform-provider-jira/internal/jira"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
@@ -38,7 +38,7 @@ func main() {
 
 	if debugMode {
 		// TODO: update this string with the full name of your provider as used in your configs
-		err := plugin.Debug(context.Background(), "registry.terraform.io/team-joob/atlassian", opts)
+		err := plugin.Debug(context.Background(), "registry.terraform.io/joob-com/jira", opts)
 		if err != nil {
 			log.Fatal(err.Error())
 		}

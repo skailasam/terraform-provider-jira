@@ -1,4 +1,4 @@
-module github.com/team-joob/terraform-provider-jira
+module github.com/joob-com/terraform-provider-jira
 
 go 1.15
 

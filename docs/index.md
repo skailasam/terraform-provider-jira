@@ -1,5 +1,5 @@
 ---
-page_title: "scaffolding Provider"
+page_title: "Jira Provider"
 subcategory: ""
 description: |-
   
@@ -12,8 +12,10 @@ description: |-
 ## Example Usage
 
 ```terraform
-provider "scaffolding" {
-  # example configuration here
+provider "jira" {
+  url       = "https://instance.atlassian.net"
+  user      = "user@example.com"
+  password  = ""
 }
 ```
 
