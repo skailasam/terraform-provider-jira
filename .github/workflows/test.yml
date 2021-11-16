@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - "README.md"
   schedule:
-    - cron: '0 4 * * *'
+    - cron: "0 4 * * *"
 jobs:
   build:
     name: Build
@@ -60,5 +60,8 @@ jobs:
         env:
           TF_ACC: "1"
           TF_ACC_TERRAFORM_VERSION: ${{ matrix.terraform }}
+          JIRA_URL: ${{ secrets.JIRA_URL }}
+          JIRA_USER: ${{ secrets.JIRA_USER }}
+          JIRA_PASSWORD: ${{ secrets.JIRA_PASSWORD }}
         run: |
           go test -v -cover ./internal/jira/
