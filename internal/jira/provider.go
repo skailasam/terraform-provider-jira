@@ -54,6 +54,7 @@ func New(version string) func() *schema.Provider {
 			ResourcesMap: map[string]*schema.Resource{
 				"jira_group":            resourceGroup(),
 				"jira_group_membership": resourceGroupMembership(),
+				"jira_issue_type":       resourceIssueType(),
 				"jira_project":          resourceProject(),
 				"jira_project_category": resourceProjectCategory(),
 				"jira_user":             resourceUser(),
