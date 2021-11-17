@@ -57,6 +57,7 @@ func New(version string) func() *schema.Provider {
 				"jira_issue_type":       resourceIssueType(),
 				"jira_project":          resourceProject(),
 				"jira_project_category": resourceProjectCategory(),
+				"jira_role":             resourceRole(),
 				"jira_user":             resourceUser(),
 			},
 		}
