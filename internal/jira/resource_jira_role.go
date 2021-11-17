@@ -43,7 +43,7 @@ func resourceRole() *schema.Resource {
 }
 
 func resourceRoleCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	res, body, err := client.Project.Role.Create(context.Background(), &jira.ProjectRolePayloadScheme{
 		Name:        d.Get("name").(string),
 		Description: d.Get("description").(string),
@@ -56,7 +56,7 @@ func resourceRoleCreate(ctx context.Context, d *schema.ResourceData, meta interf
 }
 
 func resourceRoleRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.FromErr(err)
@@ -81,21 +81,26 @@ func resourceRoleRead(ctx context.Context, d *schema.ResourceData, meta interfac
 	return nil
 }
 
+type Role struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 func resourceRoleDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 
 	buf := bytes.NewReader([]byte{})
-	req, err := http.NewRequest(
+	res, err := client.Request(
 		http.MethodDelete,
-		fmt.Sprintf("/rest/api/3/role/%s", d.Id()),
+		fmt.Sprintf("rest/api/3/role/%s", d.Id()),
 		buf,
 	)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	_, err = client.HTTP.Do(req)
-	if err != nil {
-		return diag.FromErr(err)
+	if res.StatusCode != http.StatusNoContent {
+		return diag.Errorf("Invalid response code: %d", res.StatusCode)
 	}
 	return nil
 }

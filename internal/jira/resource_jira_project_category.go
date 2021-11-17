@@ -39,7 +39,7 @@ func resourceProjectCategory() *schema.Resource {
 }
 
 func resourceProjectCategoryCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	res, _, err := client.Project.Category.Create(context.Background(), &jira.ProjectCategoryPayloadScheme{
 		Name:        d.Get("name").(string),
 		Description: d.Get("description").(string),
@@ -52,7 +52,7 @@ func resourceProjectCategoryCreate(ctx context.Context, d *schema.ResourceData, 
 }
 
 func resourceProjectCategoryRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.FromErr(err)
@@ -68,7 +68,7 @@ func resourceProjectCategoryRead(ctx context.Context, d *schema.ResourceData, me
 }
 
 func resourceProjectCategoryUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.FromErr(err)
@@ -84,7 +84,7 @@ func resourceProjectCategoryUpdate(ctx context.Context, d *schema.ResourceData, 
 }
 
 func resourceProjectCategoryDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	id, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return diag.FromErr(err)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ctreminiom/go-atlassian/jira"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -35,7 +34,7 @@ func resourceGroupMembership() *schema.Resource {
 }
 
 func resourceGroupMembershipCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	n := d.Get("group_name").(string)
 	a := d.Get("account_id").(string)
 	_, _, err := client.Group.Add(context.Background(), n, a)
@@ -47,7 +46,7 @@ func resourceGroupMembershipCreate(ctx context.Context, d *schema.ResourceData, 
 }
 
 func resourceGroupMembershipRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	name := d.Get("group_name").(string)
 	members, _, err := client.Group.Members(context.Background(), name, true, 0, 1000)
 	if err != nil {
@@ -68,7 +67,7 @@ func resourceGroupMembershipRead(ctx context.Context, d *schema.ResourceData, me
 }
 
 func resourceGroupMembershipDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	n := d.Get("group_name").(string)
 	a := d.Get("account_id").(string)
 	_, err := client.Group.Remove(context.Background(), n, a)

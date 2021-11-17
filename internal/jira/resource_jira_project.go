@@ -95,7 +95,7 @@ func resourceProject() *schema.Resource {
 }
 
 func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 
 	data := &jira.ProjectPayloadScheme{
 		Key:                 d.Get("key").(string),
@@ -121,7 +121,7 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta int
 }
 
 func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	project, _, err := client.Project.Get(context.Background(), d.Id(), []string{})
 	if err != nil {
 		return diag.FromErr(err)
@@ -134,7 +134,7 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta inter
 }
 
 func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	_, _, err := client.Project.Update(context.Background(), d.Id(), &jira.ProjectUpdateScheme{
 		Key:         d.Get("key").(string),
 		Name:        d.Get("name").(string),
@@ -147,7 +147,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta int
 }
 
 func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	_, err := client.Project.Delete(context.Background(), d.Id(), false)
 	if err != nil {
 		return diag.FromErr(err)

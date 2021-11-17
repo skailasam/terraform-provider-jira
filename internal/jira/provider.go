@@ -2,7 +2,11 @@ package jira
 
 import (
 	"context"
+	"fmt"
+	"io"
+	"net/http"
 
+	"github.com/ctreminiom/go-atlassian/jira"
 	atlassian "github.com/ctreminiom/go-atlassian/jira"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -68,16 +72,35 @@ func New(version string) func() *schema.Provider {
 	}
 }
 
+type client struct {
+	*jira.Client
+	user     string
+	password string
+}
+
+func (c *client) Request(method, endpoint string, body io.Reader) (*http.Response, error) {
+	req, err := http.NewRequest(
+		method,
+		fmt.Sprintf("%s%s", c.Site.String(), endpoint),
+		body,
+	)
+	if err != nil {
+		return nil, err
+	}
+	req.SetBasicAuth(c.user, c.password)
+	return c.HTTP.Do(req)
+}
+
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		client, err := atlassian.New(nil, d.Get("url").(string))
+		c, err := atlassian.New(nil, d.Get("url").(string))
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
-		client.Auth.SetBasicAuth(
-			d.Get("user").(string),
-			d.Get("password").(string),
-		)
-		return client, nil
+		wrapper := &client{Client: c}
+		wrapper.user = d.Get("user").(string)
+		wrapper.password = d.Get("password").(string)
+		wrapper.Auth.SetBasicAuth(wrapper.user, wrapper.password)
+		return wrapper, nil
 	}
 }

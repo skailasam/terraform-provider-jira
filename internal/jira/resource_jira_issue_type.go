@@ -45,7 +45,7 @@ func resourceIssueType() *schema.Resource {
 }
 
 func resourceIssueTypeCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	res, _, err := client.Issue.Type.Create(context.Background(), &jira.IssueTypePayloadScheme{
 		Name:           d.Get("name").(string),
 		Description:    d.Get("description").(string),
@@ -59,7 +59,7 @@ func resourceIssueTypeCreate(ctx context.Context, d *schema.ResourceData, meta i
 }
 
 func resourceIssueTypeRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	res, _, err := client.Issue.Type.Get(context.Background(), d.Id())
 	if err != nil {
 		return diag.FromErr(err)
@@ -72,7 +72,7 @@ func resourceIssueTypeRead(ctx context.Context, d *schema.ResourceData, meta int
 }
 
 func resourceIssueTypeUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	_, _, err := client.Issue.Type.Update(context.Background(), d.Id(), &jira.IssueTypePayloadScheme{
 		Name:           d.Get("name").(string),
 		Description:    d.Get("description").(string),
@@ -85,7 +85,7 @@ func resourceIssueTypeUpdate(ctx context.Context, d *schema.ResourceData, meta i
 }
 
 func resourceIssueTypeDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	_, err := client.Issue.Type.Delete(context.Background(), d.Id())
 	if err != nil {
 		return diag.FromErr(err)

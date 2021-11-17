@@ -3,7 +3,6 @@ package jira
 import (
 	"context"
 
-	"github.com/ctreminiom/go-atlassian/jira"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -31,7 +30,7 @@ func dataSourceUser() *schema.Resource {
 }
 
 func dataSourceUserRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 
 	v, ok := d.GetOk("email_address")
 	if !ok {

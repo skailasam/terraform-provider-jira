@@ -44,7 +44,7 @@ func resourceUser() *schema.Resource {
 }
 
 func resourceUserCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	user, res, err := client.User.Create(context.Background(), &jira.UserPayloadScheme{
 		EmailAddress: d.Get("email_address").(string),
 		DisplayName:  d.Get("display_name").(string),
@@ -58,7 +58,7 @@ func resourceUserCreate(ctx context.Context, d *schema.ResourceData, meta interf
 }
 
 func resourceUserRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	user, _, err := client.User.Get(context.Background(), d.Id(), []string{})
 	if err != nil {
 		return diag.FromErr(err)
@@ -70,7 +70,7 @@ func resourceUserRead(ctx context.Context, d *schema.ResourceData, meta interfac
 }
 
 func resourceUserDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	_, err := client.User.Delete(context.Background(), d.Id())
 	if err != nil {
 		return diag.FromErr(err)

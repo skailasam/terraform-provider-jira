@@ -3,7 +3,6 @@ package jira
 import (
 	"context"
 
-	"github.com/ctreminiom/go-atlassian/jira"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -28,7 +27,7 @@ func resourceGroup() *schema.Resource {
 }
 
 func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	name := d.Get("name").(string)
 	_, _, err := client.Group.Create(context.Background(), name)
 	if err != nil {
@@ -38,7 +37,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta inter
 }
 
 func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	name := d.Get("name").(string)
 	_, _, err := client.Group.Members(context.Background(), name, false, 0, 1000)
 	if err != nil {
@@ -49,7 +48,7 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta interfa
 }
 
 func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	client := meta.(*jira.Client)
+	client := meta.(*client)
 	_, err := client.Group.Delete(context.Background(), d.Get("name").(string))
 	if err != nil {
 		return diag.FromErr(err)
